@@ -31,20 +31,11 @@ export class UsersService {
         return new UserResponseDto(user);
     }
 
-    async verifyUser(email: string, password: string) {
-        const user = await this.usersRepository.findOne({ email });
-        const passwordIsValid = await bcrypt.compare(password, user.password);
-        if (!passwordIsValid) {
-            throw new UnauthorizedException('Credentials are not valid.');
-        }
-        return user;
-    }
-
     async getUser(getUserDto: GetUserDto) {
-        return this.usersRepository.findOne(getUserDto);
+        return this.usersRepository.findOne({_id: getUserDto.id});
     }
 
-    private async validateUserDto(userDto: CreateUserDto|UpdateUserDto) {
+    private async validateUserDto(userDto: CreateUserDto) {
         try {
             await this.usersRepository.findOne({ email: userDto.email });
         } catch (err) {
@@ -53,14 +44,16 @@ export class UsersService {
         throw new UnprocessableEntityException('Email already exists.');
     }
 
-    async updateUser(user: UpdateUserDto){
-        await this.validateUserDto(user);
-        const updatedUser = await this.usersRepository.findOneAndUpdate({_id: user._id}, {$set: user});
+    async updateUser(userId: string, userDto: UpdateUserDto){
+        if(userDto.password) {
+            userDto.password = await bcrypt.hash(userDto.password, 10);
+        }
+        const updatedUser = await this.usersRepository.findOneAndUpdate({_id: userId}, {$set: userDto});
 
         return new UserResponseDto(updatedUser);
     }
 
-    async deleteUser(userId: Types.ObjectId) {
+    async deleteUser(userId: string) {
         const user = await this.usersRepository.findOneAndDelete({ _id: userId });
 
         this.notificationsService.emit(

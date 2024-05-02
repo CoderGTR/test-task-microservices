@@ -37,7 +37,7 @@ lerna-debug.log*
 
 # dotenv environment variable files
 *.env
-apps/auth/.env
+apps/users/.env
 apps/notifications/.env
 .env.development.local
 .env.test.local

@@ -1,11 +1,7 @@
-import {Body, Controller, Delete, Get, HttpCode, Patch, Post, Query, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query} from '@nestjs/common';
 import {CreateUserDto} from "./dto/create-user.dto";
 import {UsersService} from "./users.service";
-import {CurrentUser} from "@app/common/decorators/current-user.decorator";
-import {UserDocument} from "@app/common";
-import {JwtAuthGuard} from "../guards/jwt-auth.guard";
 import {UpdateUserDto} from "./dto/update-user.dto";
-import {UserResponseDto} from "./dto/user-response.dto";
 
 @Controller('users')
 export class UsersController {
@@ -17,32 +13,29 @@ export class UsersController {
         return this.usersService.create(createUserDto);
     }
 
-    @Get('/me')
-    @UseGuards(JwtAuthGuard)
+    @Get('/:id')
     async getUser(
-        @CurrentUser() user: UserDocument,
+        @Param('id') id: string,
     ){
-        return new UserResponseDto(user);
+        return this.usersService.getUser({id});
     }
 
-    @Patch()
-    @UseGuards(JwtAuthGuard)
+    @Patch('/:id')
     async updateUser(
+        @Param('id') id: string,
         @Body() updateUserDto: UpdateUserDto,
     ){
-        return this.usersService.updateUser(updateUserDto);
+        return this.usersService.updateUser(id, updateUserDto);
     }
 
-    @Delete()
-    @UseGuards(JwtAuthGuard)
+    @Delete('/:id')
     async deleteUser(
-        @CurrentUser() user: UserDocument,
+        @Param('id') id: string,
     ) {
-        return this.usersService.deleteUser(user._id);
+        return this.usersService.deleteUser(id);
     }
 
     @Get()
-    @UseGuards(JwtAuthGuard)
     async getUsers(
         @Query('page') page: number = 1,
         @Query('limit') limit: number = 10
@@ -50,7 +43,7 @@ export class UsersController {
         return this.usersService.getUsers(page, limit);
     }
 
-    @Get('/httpHealth')
+    @Get('/health/httpHealth')
     @HttpCode(200)
     checkHealth() {
         return { status: 'up' };

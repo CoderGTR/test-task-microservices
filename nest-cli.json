@@ -1,10 +1,10 @@
 {
   "monorepo": true,
-  "root": "apps/auth",
-  "sourceRoot": "apps/auth/src",
+  "root": "apps/users",
+  "sourceRoot": "apps/users/src",
   "compilerOptions": {
     "webpack": true,
-    "tsConfigPath": "apps/auth/tsconfig.app.json"
+    "tsConfigPath": "apps/users/tsconfig.app.json"
   },
   "projects": {
     "common": {
@@ -16,13 +16,13 @@
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
     },
-    "auth": {
+    "users": {
       "type": "application",
-      "root": "apps/auth",
+      "root": "apps/users",
       "entryFile": "main",
-      "sourceRoot": "apps/auth/src",
+      "sourceRoot": "apps/users/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/auth/tsconfig.app.json"
+        "tsConfigPath": "apps/users/tsconfig.app.json"
       }
     },
     "notifications": {

@@ -3,14 +3,14 @@ import {Types} from "mongoose";
 
 
 export class UserResponseDto {
-    _id: Types.ObjectId;
+    id: Types.ObjectId;
     email: string;
     name: string;
     createdAt: Date;
     updatedAt: Date;
 
     constructor(user: UserDocument) {
-        this._id = user._id;
+        this.id = user._id;
         this.email = user.email;
         this.name = user.name;
         this.createdAt = user.createdAt;

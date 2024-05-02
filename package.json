@@ -17,7 +17,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e auth": "jest --config ./apps/auth/test/jest-e2e.json"
+    "test:e2e auth": "jest --config ./apps/users/test/jest-e2e.json"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.2",
@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/terminus": "^10.2.3",
     "@types/bcryptjs": "^2.4.6",
+    "@types/mongoose-auto-increment": "^5.0.38",
     "amqp-connection-manager": "^4.1.14",
     "amqplib": "^0.10.4",
     "axios": "^1.6.8",
@@ -39,6 +40,7 @@
     "express": "^4.19.2",
     "joi": "^17.12.3",
     "mongoose": "^8.3.1",
+    "mongoose-auto-increment": "^5.0.1",
     "nestjs-pino": "^4.0.0",
     "pino-http": "^9.0.0",
     "pino-pretty": "^11.0.0",

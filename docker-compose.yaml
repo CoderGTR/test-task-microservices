@@ -1,13 +1,13 @@
 services:
   auth:
-    container_name: auth
+    container_name: users
     build:
       context: .
-      dockerfile: ./apps/auth/Dockerfile
+      dockerfile: ./apps/users/Dockerfile
       target: development
-    command: pnpm run start:dev auth
+    command: pnpm run start:dev users
     env_file:
-      - './apps/auth/.env'
+      - './apps/users/.env'
     ports:
       - '3001:3001'
     volumes:

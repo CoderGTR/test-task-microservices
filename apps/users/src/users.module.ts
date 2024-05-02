@@ -1,29 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { UsersModule } from './users/users.module';
-import {LoggerModule, NOTIFICATIONS_SERVICE} from "@app/common";
-import {JwtModule} from "@nestjs/jwt";
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+import {DatabaseModule, LoggerModule, NOTIFICATIONS_SERVICE} from '@app/common';
+import { UserDocument, UserSchema } from "@app/common";
+import { UsersRepository } from "./users.repository";
+import {ClientsModule, Transport} from "@nestjs/microservices";
 import {ConfigModule, ConfigService} from "@nestjs/config";
 import * as Joi from "joi";
-import {LocalStrategy} from "./strategies/local.strategy";
-import {JwtStrategy} from "./strategies/jwt.strategy";
-import {ClientsModule, Transport} from "@nestjs/microservices";
 import {HealthModule} from "./health/health.module";
 
 @Module({
   imports: [
-    UsersModule,
+    DatabaseModule,
     LoggerModule,
-    JwtModule.registerAsync({
-      useFactory: (configService: ConfigService) => ({
-      secret: configService.get<string>('JWT_SECRET'),
-      signOptions: {
-          expiresIn: `${configService.get('JWT_EXPIRATION')}s`
-        }
-      }),
-      inject: [ConfigService],
-  }),
+    DatabaseModule.forFeature([{ name: UserDocument.name, schema: UserSchema }]),
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
@@ -51,7 +41,8 @@ import {HealthModule} from "./health/health.module";
     ]),
     HealthModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  controllers: [UsersController],
+  providers: [UsersService, UsersRepository],
+  exports: [UsersService],
 })
-export class AuthModule {}
+export class UsersModule {}

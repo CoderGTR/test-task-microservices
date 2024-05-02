@@ -11,12 +11,12 @@ RUN npm install -g pnpm
 
 RUN pnpm install
 
-COPY apps/auth apps/auth
+COPY apps/users apps/users
 COPY libs libs
 
-RUN cd apps/auth && pnpm install
+RUN cd apps/users && pnpm install
 
-RUN pnpm run build auth
+RUN pnpm run build users
 
 FROM node:alpine as production
 
@@ -34,4 +34,4 @@ RUN pnpm install --prod
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/apps/auth/main"]
+CMD ["node", "dist/apps/users/main"]
