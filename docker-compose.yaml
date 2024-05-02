@@ -1,0 +1,33 @@
+services:
+  auth:
+    container_name: auth
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: development
+    command: pnpm run start:dev auth
+    env_file:
+      - './apps/auth/.env'
+    ports:
+      - '3001:3001'
+    volumes:
+      - .:/usr/src/app
+  notifications:
+    container_name: notifications
+    build:
+      context: .
+      dockerfile: ./apps/notifications/Dockerfile
+      target: development
+    command: pnpm run start:dev notifications
+    env_file:
+      - './apps/notifications/.env'
+    volumes:
+      - .:/usr/src/app
+  mongo:
+    container_name: mongodb
+    image: mongo
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq
+    ports:
+      - 5672:5672
